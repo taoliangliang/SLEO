@@ -9,7 +9,6 @@ class LazyMajDistance:
         self.cache = {}
 
     def get_min_distance(self, cluster):
-        # cluster 是一个索引列表，代表一整个簇
         key = tuple(sorted(cluster))
         if key in self.cache:
             return self.cache[key]
@@ -28,6 +27,6 @@ class LazyMajDistance:
             self.get_min_distance(other)
         )
 
-        # 删除旧 key
         self.cache.pop(tuple(sorted(merged)), None)
+
         self.cache.pop(tuple(sorted(other)), None)
