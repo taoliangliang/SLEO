@@ -21,22 +21,13 @@ class SLEO(object):
                  alpha=20,
                  prob_type='bagging',
                  p_norm=2):
-        '''
-        :param prob_type: 计算概率的方式
-        :param alpha:  熵衰减因子
-        :param p_norm: 距离计算方式
-        '''
+   
         self.prob_type = prob_type
         self.alpha = alpha
         self.p_norm = p_norm
 
     def get_dataInfo(self, X, y):
-        '''
-         todo：获取数据集的基本信息
-        :param X:
-        :param y:
-        :return:
-        '''
+   
 
         self.X = check_array(X)
         self.y = np.array(y)
@@ -50,12 +41,7 @@ class SLEO(object):
 
 
     def fit_sample(self, X, y):
-        '''
-        todo：采样方法
-        :param X: 原始样本特征
-        :param y: 样本标签
-        :return: 合并后的采样生成样本与原始样本
-        '''
+
         self.get_dataInfo(X, y)
         self.balanced_points = X[y == self.maj_class_]
         self.balanced_labels = y[y == self.maj_class_]
@@ -86,13 +72,7 @@ class SLEO(object):
         return direction_unit_vector * np.random.rand() * radius
 
     def generate_samples(self, current_minority_points):
-        '''
-        todo：入口调用函数  计算每个少数样本权重
-        :param X:
-        :param y:
-        :param minority_class:
-        :return:
-        '''
+ 
         minority_points = current_minority_points
         clusters, labels_, clusters_center = self.semi_cluster(minority_points, self.balanced_points)
         self.compute_entropy(minority_points, clusters)
@@ -113,13 +93,7 @@ class SLEO(object):
         self.gi = np.rint(min_weight * self.n).astype(np.int32)
 
     def entropy_decay(self, majority_points, clusters, clusters_center):
-        """
-        熵衰减模型
-        :param majority_points: 多数类别
-        :param clusters: 类簇
-        :param clusters_center: 类簇中心
-        :return:
-        """
+  
         num_clusters = len(clusters)
         self.radii = np.zeros(num_clusters)
         translations = np.zeros_like(majority_points, dtype=np.float64)
@@ -155,13 +129,7 @@ class SLEO(object):
         return majority_points
 
     def compute_entropy(self, minority_points, clusters):
-        '''
-            计算初类簇熵
-        :param majority_points: 多数类别
-        :param minority_points: 少数类别
-        :param clusters: 类簇数量
-        :return:
-        '''
+
 
         self.min_sample_entropy = np.zeros(len(minority_points))
         self.min_cls_entropy = np.zeros(len(clusters))
@@ -185,12 +153,7 @@ class SLEO(object):
                 self.min_cls_entropy[i] = self.min_cls_entropy[i] + self.min_sample_entropy[clusters[i][j]]
 
     def semi_cluster(self, minority_points, majority_points):
-        """
-        半监督层次聚类
-        :param minority_points: 少数类别
-        :param majority_points: 多数类别
-        :return:
-        """
+
         dm_min = LazyDistanceMatrix(minority_points)
         dm_maj = LazyMajDistance(minority_points, majority_points)
 
@@ -226,6 +189,7 @@ class SLEO(object):
             cluster_centers[i] = np.mean(minority_points[cluster], axis=0)
 
         return final_clusters, labels_, cluster_centers
+
 
 
 
